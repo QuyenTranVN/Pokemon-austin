@@ -1,0 +1,14 @@
+1.  login => sau khi login thì redirect qua List danh sách. (router) Hiên tại là no-auth. 
+phải set cứng để login
+dùng Locostorage để khi reload trang ko bị mất thông tin + load lên navbar
+
+2. Dùng service để lấy api cho List và detai => show thông tin lên trang.
+
+3. Click từng mục  trong list để hiện ra thông tin chi tiết của nhân vật. 
+Dùng Service để lấy api cho từng nhân vật. 
+
+4. Khi click button next/previous thì qua detail nhân vật tiếp. 
+
+5. Khi bấm like/dislike thì sẽ hiện lên navbar. 
+
+Estimate time: 5 working days. 

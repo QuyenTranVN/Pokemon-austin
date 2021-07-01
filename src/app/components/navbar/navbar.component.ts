@@ -62,12 +62,10 @@ export class NavbarComponent {
 	ngOnInit() {
 		this.isLoggedIn =
 			JSON.parse(localStorage.getItem("inforUser")).name !== "" ? true : false;
-		console.log(localStorage.getItem("inforUser"));
 		if (JSON.parse(localStorage.getItem("inforUser"))) {
 			this.user = JSON.parse(localStorage.getItem("inforUser"));
 		}
-		this.getLikes();
-		this.getDislikes();
+		this.getNumVote();
 	}
 	logIn() {
 		this.userService.isLogin(true);
@@ -85,21 +83,14 @@ export class NavbarComponent {
 		this.userService.isLogin(false);
 		localStorage.removeItem("inforUser");
 		this.user = { name: "", likes: null, dislikes: null };
-		this.shareData.like(0);
-		this.shareData.dislike(0);
+		this.shareData.setFavourite({ like: 0, dislike: 0 });
 		this.router.navigate(["/not-auth"]);
 		this.isLoggedIn = false;
 	}
 
-	getLikes() {
-		this.shareData.likePokemon.subscribe((data: any) => {
-			this.user.likes = data;
-			localStorage.setItem("inforUser", JSON.stringify(this.user));
-		});
-	}
-	getDislikes() {
-		this.shareData.dislikePokemon.subscribe((data: any) => {
-			this.user.dislikes = data;
+	getNumVote() {
+		this.shareData.getFavourite.subscribe((data: any) => {
+			this.user = data;
 			localStorage.setItem("inforUser", JSON.stringify(this.user));
 		});
 	}

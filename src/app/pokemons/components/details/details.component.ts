@@ -4,7 +4,7 @@ import {
 	HostBinding,
 	OnInit,
 } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { BackendService } from "src/app/services/backend.service";
 import { ShareDataService } from "src/app/services/share-data.service";
 
@@ -39,24 +39,22 @@ import { ShareDataService } from "src/app/services/share-data.service";
 	],
 })
 export class DetailsComponent implements OnInit {
-	numLike = 0;
-	numDislike = 0;
+	votes;
 	totalPokemons: number;
 	idPokemon: number;
 	pokemonDetails = {};
 	constructor(
 		private backendService: BackendService,
 		private activatedRoute: ActivatedRoute,
-		private shareData: ShareDataService
+		private shareData: ShareDataService,
+		private route: Router
 	) {
 		this.idPokemon = this.activatedRoute.snapshot.params.id;
 	}
 
 	ngOnInit() {
 		this.getPokemonDetails();
-		this.getTotalPokemons();
-		this.getLikeNumber();
-		this.getDislikeNumber();
+		this.getNumberVotes();
 	}
 
 	getPokemonDetails() {
@@ -64,11 +62,7 @@ export class DetailsComponent implements OnInit {
 			this.pokemonDetails = data;
 		});
 	}
-	getTotalPokemons() {
-		this.shareData.totalPokemon.subscribe((data: number) => {
-			this.totalPokemons = data;
-		});
-	}
+
 	@HostBinding("class") hostClass =
 		"flex flex-col gap-4 items-center justify-center";
 
@@ -79,6 +73,7 @@ export class DetailsComponent implements OnInit {
 				.subscribe((data) => {
 					this.pokemonDetails = data;
 				});
+			this.route.navigate(["pokemons", this.idPokemon]);
 		}
 	}
 
@@ -89,26 +84,21 @@ export class DetailsComponent implements OnInit {
 				.subscribe((data) => {
 					this.pokemonDetails = data;
 				});
+			this.route.navigate(["pokemons", this.idPokemon]);
 		}
 	}
 
 	like() {
-		this.numLike++;
-		this.shareData.like(this.numLike);
+		this.votes.likes++;
+		this.shareData.setFavourite(this.votes);
 	}
-
-	getLikeNumber() {
-		this.shareData.likePokemon.subscribe((data) => {
-			this.numLike = data;
+	getNumberVotes() {
+		this.shareData.getFavourite.subscribe((data: any) => {
+			this.votes = data;
 		});
 	}
 	dislike() {
-		this.numDislike++;
-		this.shareData.dislike(this.numDislike);
-	}
-	getDislikeNumber() {
-		this.shareData.dislikePokemon.subscribe((data) => {
-			this.numDislike = data;
-		});
+		this.votes.dislikes++;
+		this.shareData.setFavourite(this.votes);
 	}
 }

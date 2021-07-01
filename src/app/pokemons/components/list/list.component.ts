@@ -58,7 +58,6 @@ export class ListComponent implements OnInit {
 				this.listPokemon = data.results;
 				this.total = data.count;
 				this.isLoading = false;
-				this.shareData.total(data.count);
 			});
 	}
 }

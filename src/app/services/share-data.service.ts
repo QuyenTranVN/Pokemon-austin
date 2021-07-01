@@ -5,31 +5,14 @@ import { BehaviorSubject } from "rxjs";
 	providedIn: "root",
 })
 export class ShareDataService {
-	userInfoLike = JSON.parse(localStorage.getItem("inforUser"))
-		? JSON.parse(localStorage.getItem("inforUser")).likes
-		: 0;
-	userInfoDisLike = JSON.parse(localStorage.getItem("inforUser"))
-		? JSON.parse(localStorage.getItem("inforUser")).dislikes
-		: 0;
-	private totalPokemonSubject = new BehaviorSubject({});
-	totalPokemon = this.totalPokemonSubject.asObservable();
+	userInfo = JSON.parse(localStorage.getItem("inforUser"));
 
-	private likePokemonSubject = new BehaviorSubject(this.userInfoLike);
-	likePokemon = this.likePokemonSubject.asObservable();
-
-	private dislikePokemonSubject = new BehaviorSubject(this.userInfoDisLike);
-	dislikePokemon = this.dislikePokemonSubject.asObservable();
+	private favouriteSubject = new BehaviorSubject(this.userInfo);
+	getFavourite = this.favouriteSubject.asObservable();
 
 	constructor() {}
 
-	total(total: number) {
-		this.totalPokemonSubject.next(total);
-	}
-
-	like(like: number) {
-		this.likePokemonSubject.next(like);
-	}
-	dislike(dislike: number) {
-		this.dislikePokemonSubject.next(dislike);
+	setFavourite(vote: any) {
+		this.favouriteSubject.next(vote);
 	}
 }

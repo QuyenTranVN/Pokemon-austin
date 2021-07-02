@@ -30,7 +30,7 @@ export class AuthenticatedGuard
 		// console.log("----");
 		// console.log(JSON.parse(localStorage.getItem("inforUser")));
 
-		if (JSON.parse(localStorage.getItem("inforUser"))) {
+		if (localStorage.getItem("inforUser")) {
 			return true;
 		} else {
 			this.router.navigate(["/not-auth"]);

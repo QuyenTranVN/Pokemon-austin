@@ -53,6 +53,7 @@ export class DetailsComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		console.log("------");
 		this.getPokemonDetails();
 		this.getNumberVotes();
 	}
@@ -67,12 +68,11 @@ export class DetailsComponent implements OnInit {
 		"flex flex-col gap-4 items-center justify-center";
 
 	nextId() {
+		this.idPokemon++;
 		if (this.idPokemon < 102200) {
-			this.backendService
-				.getPokemonDetail(this.idPokemon++)
-				.subscribe((data) => {
-					this.pokemonDetails = data;
-				});
+			this.backendService.getPokemonDetail(this.idPokemon).subscribe((data) => {
+				this.pokemonDetails = data;
+			});
 			this.route.navigate(["pokemons", this.idPokemon]);
 		}
 	}

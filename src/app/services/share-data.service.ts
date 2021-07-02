@@ -5,7 +5,9 @@ import { BehaviorSubject } from "rxjs";
 	providedIn: "root",
 })
 export class ShareDataService {
-	userInfo = JSON.parse(localStorage.getItem("inforUser"));
+	userInfo = localStorage.getItem("inforUser")
+		? JSON.parse(localStorage.getItem("inforUser"))
+		: {};
 
 	private favouriteSubject = new BehaviorSubject(this.userInfo);
 	getFavourite = this.favouriteSubject.asObservable();

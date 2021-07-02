@@ -51,7 +51,7 @@ import { User } from "../../models/user";
 })
 export class NavbarComponent {
 	version = VERSION.full;
-	user: User = { name: "", likes: null, dislikes: null };
+	user: User;
 	isLoggedIn = false;
 	constructor(
 		private userService: UserService,
@@ -60,10 +60,14 @@ export class NavbarComponent {
 	) {}
 
 	ngOnInit() {
-		this.isLoggedIn =
-			JSON.parse(localStorage.getItem("inforUser")).name !== "" ? true : false;
-		if (JSON.parse(localStorage.getItem("inforUser"))) {
-			this.user = JSON.parse(localStorage.getItem("inforUser"));
+		if (localStorage.getItem("inforUser") != JSON.stringify({})) {
+			this.isLoggedIn =
+				JSON.parse(localStorage.getItem("inforUser")).name !== ""
+					? true
+					: false;
+			if (JSON.parse(localStorage.getItem("inforUser"))) {
+				this.user = JSON.parse(localStorage.getItem("inforUser"));
+			}
 		}
 		this.getNumVote();
 	}
@@ -76,6 +80,7 @@ export class NavbarComponent {
 		};
 		localStorage.setItem("inforUser", JSON.stringify(this.user));
 		this.router.navigate(["/pokemons"]);
+		this.shareData.setFavourite(JSON.parse(localStorage.getItem("inforUser")));
 		this.isLoggedIn = true;
 	}
 
@@ -83,15 +88,17 @@ export class NavbarComponent {
 		this.userService.isLogin(false);
 		localStorage.removeItem("inforUser");
 		this.user = { name: "", likes: null, dislikes: null };
-		this.shareData.setFavourite({ like: 0, dislike: 0 });
+		this.shareData.setFavourite({});
 		this.router.navigate(["/not-auth"]);
 		this.isLoggedIn = false;
 	}
 
 	getNumVote() {
-		this.shareData.getFavourite.subscribe((data: any) => {
-			this.user = data;
-			localStorage.setItem("inforUser", JSON.stringify(this.user));
-		});
+		if (JSON.parse(localStorage.getItem("inforUser")).name !== "") {
+			this.shareData.getFavourite.subscribe((data: any) => {
+				this.user = data;
+				localStorage.setItem("inforUser", JSON.stringify(this.user));
+			});
+		}
 	}
 }
